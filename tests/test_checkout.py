@@ -21,19 +21,22 @@ class TestCheckoutValidation:
         checkout = self._go_to_step1(logged_in_page)
         checkout.fill_info("", "Иванов", "12345")
         checkout.click_continue()
-        assert checkout.check_error(E_MSG_CHECKOUT_FIRSTNAME), "Должна быть ошибка: First Name is required"
+        assert checkout.check_error(E_MSG_CHECKOUT_FIRSTNAME),\
+            "Должна быть ошибка: First Name is required"
 
     def test_check_003(self, logged_in_page):
         checkout = self._go_to_step1(logged_in_page)
         checkout.fill_info("Иван", "", "12345")
         checkout.click_continue()
-        assert checkout.check_error(E_MSG_CHECKOUT_LASTNAME), "Должна быть ошибка: Last Name is required"
+        assert checkout.check_error(E_MSG_CHECKOUT_LASTNAME),\
+            "Должна быть ошибка: Last Name is required"
 
     def test_check_004(self, logged_in_page):
         checkout = self._go_to_step1(logged_in_page)
         checkout.fill_info("Иван", "Иванов", "")
         checkout.click_continue()
-        assert checkout.check_error(E_MSG_CHECKOUT_ZIPCODE), "Должна быть ошибка: Postal Code is required"
+        assert checkout.check_error(E_MSG_CHECKOUT_ZIPCODE),\
+            "Должна быть ошибка: Postal Code is required"
 
     def test_check_005(self, logged_in_page):
         # SauceDemo принимает любой формат postal code — документируем поведение
@@ -58,7 +61,8 @@ class TestCheckoutValidation:
         item_total = checkout.get_item_total()
         tax = checkout.get_tax()
         total = checkout.get_total()
-        assert abs(total - (item_total + tax)) < 0.01, "Итог должен равняться сумме товаров + налог"
+        assert abs(total - (item_total + tax)) < 0.01,\
+            "Итог должен равняться сумме товаров + налог"
 
     def test_check_010(self, logged_in_page):
         inventory = InventoryPage(logged_in_page)
@@ -75,6 +79,8 @@ class TestCheckoutValidation:
         item_total = checkout.get_item_total()
         tax = checkout.get_tax()
         total = checkout.get_total()
-        assert abs(total - (item_total + tax)) < 0.01, "Итог должен равняться сумме товаров + налог"
+        assert abs(total - (item_total + tax)) < 0.01,\
+            "Итог должен равняться сумме товаров + налог"
         checkout.click_finish()
-        assert checkout.check_order_complete(), "Заказ с несколькими товарами не был оформлен"
+        assert checkout.check_order_complete(),\
+            "Заказ с несколькими товарами не был оформлен"

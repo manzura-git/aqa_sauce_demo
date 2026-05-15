@@ -10,12 +10,27 @@ class InventoryPage(BasePage):
         super().__init__(page)
         self.title = self.page.locator(".title")
         self.backpack1 = self.page.get_by_text(BACKPACK)
-        self.price = self.page.locator(f"//*[text()='{BACKPACK}']/../../..//*[@class='inventory_item_price']")
-        self.btn_add_to_card = self.page.locator(f"//*[text()='{BACKPACK}']/../../..//button")
+        self.price = self.page.locator(f"//*[text()='{BACKPACK}']"
+                                       f"/../../..//*[@class='inventory_item_price']")
+        self.btn_add_to_card = self.page.locator(f"//*[text()="
+                                                 f"'{BACKPACK}']/../../..//button")
         self.loc_price = "../../*[@class='inventory_item_price']"
         self.cart_badge = self.page.locator(".shopping_cart_badge")
         self.sort_select = self.page.locator("select.product_sort_container")
-        self.btn_remove_backpack = self.page.locator("[data-test='remove-sauce-labs-backpack']")
+        self.btn_remove_backpack = self.page.locator("[data-test="
+                                                     "'remove-sauce-labs-backpack']")
+        self.inventory_items = self.page.locator(".inventory_item")
+        self.inventory_item_names = self.page.locator(".inventory_item_name")
+        self.inventory_item_prices = self.page.locator(".inventory_item_price")
+        self.cart_icon = self.page.locator(".shopping_cart_link")
+        self.backpack_image = self.page.locator(
+            f"//*[text()='{BACKPACK}']/ancestor::div[contains(@class,'inventory_item')]//img"
+        )
+        self.logo = self.page.locator(".app_logo")
+        self.hamburger_menu_btn = self.page.locator("#react-burger-menu-btn")
+        self.hamburger_close_btn = self.page.locator("#react-burger-cross-btn")
+        self.logout_link = self.page.locator("#logout_sidebar_link")
+        self.add_to_cart_by_name_selector = ".inventory_item:has-text('{}') button"
 
     def check_backpack1_visible(self):
         expect(self.backpack1).to_be_visible()
@@ -30,7 +45,7 @@ class InventoryPage(BasePage):
         self.btn_add_to_card.click()
 
     def click_add_to_cart_by_name(self, product_name: str):
-        self.page.locator(f".inventory_item:has-text('{product_name}') button").click()
+        self.page.locator(self.add_to_cart_by_name_selector.format(product_name)).click()
 
     def check_cart_badge(self, count: str):
         expect(self.cart_badge).to_have_text(count)
@@ -44,13 +59,13 @@ class InventoryPage(BasePage):
         return True
 
     def get_item_count(self) -> int:
-        return self.page.locator(".inventory_item").count()
+        return self.inventory_items.count()
 
     def get_all_names(self) -> list:
-        return self.page.locator(".inventory_item_name").all_text_contents()
+        return self.inventory_item_names.all_text_contents()
 
     def get_all_prices(self) -> list:
-        texts = self.page.locator(".inventory_item_price").all_text_contents()
+        texts = self.inventory_item_prices.all_text_contents()
         return [float(t.replace("$", "")) for t in texts]
 
     def select_sort(self, value: str):
@@ -69,22 +84,20 @@ class InventoryPage(BasePage):
         )
 
     def click_cart_icon(self):
-        self.page.locator(".shopping_cart_link").click()
+        self.cart_icon.click()
 
     def click_backpack_image(self):
-        self.page.locator(
-            f"//*[text()='{BACKPACK}']/ancestor::div[contains(@class,'inventory_item')]//img"
-        ).click()
+        self.backpack_image.click()
 
     def click_logo(self):
-        self.page.locator(".app_logo").click()
+        self.logo.click()
 
     def open_hamburger_menu(self):
-        self.page.locator("#react-burger-menu-btn").click()
+        self.hamburger_menu_btn.click()
 
     def close_hamburger_menu(self):
-        self.page.locator("#react-burger-cross-btn").click()
+        self.hamburger_close_btn.click()
 
     def logout(self):
-        self.page.locator("#react-burger-menu-btn").click()
-        self.page.locator("#logout_sidebar_link").click()
+        self.hamburger_menu_btn.click()
+        self.logout_link.click()
