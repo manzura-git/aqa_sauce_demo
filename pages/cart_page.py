@@ -44,4 +44,5 @@ class CartPage(BasePage):
 
     def check_items_count(self, count: int):
         assert self.cart_items.count() == count,\
-            f"Ожидалось {count} товаров, найдено {self.cart_items.count()}"
+            (f"Ожидалось {count} товаров, найдено"
+             f"{self.cart_items.count()}")
