@@ -1,3 +1,6 @@
 USER1_NAME = "standard_user"
 USER_FAKE_NAME = "fake_user"
+USER_LOCKED_NAME = "locked_out_user"
+USER_PROBLEM_NAME = "problem_user"
+USER_PERFORMANCE_NAME = "performance_glitch_user"
 USERS_PASSWORD = "secret_sauce"

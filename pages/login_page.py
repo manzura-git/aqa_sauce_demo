@@ -10,8 +10,6 @@ class LoginPage(BasePage):
         super().__init__(page)
         self.field_username = self.page.locator("#user-name")
         self.field_password = self.page.locator("#password")
-        # self.btn_login = self.page.locator("[data-test='login-button']")
-        # self.btn_login = self.page.get_by_test_id("login-button")
         self.btn_login = self.page.get_by_role("button", name="Login")
         self.error = self.page.locator(".error-message-container")
 
@@ -31,7 +29,6 @@ class LoginPage(BasePage):
         expect(self.field_password).to_have_value(password)
 
     def check_error_with_msg(self, error_msg=E_MSG_LOGIN):
-        # expect(self.error).to_have_element(".error-message")
         expect(self.error).to_be_visible()
         expect(self.error).to_have_text(error_msg)
         return True
