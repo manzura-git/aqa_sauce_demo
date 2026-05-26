@@ -90,6 +90,7 @@ jobs:
             🔢 Run: #${{ github.run_number }}
             📊 Статус: ${{ job.status }}
             
+            
             🔗 GitHub Actions:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
