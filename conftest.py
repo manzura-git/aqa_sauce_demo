@@ -12,15 +12,12 @@ def page(request):
             headless_ = request.param[0]
         else:
             headless_ = request.param
-    else:
-        headless_ = False
     with sync_playwright() as drv:
-        browser = drv.chromium.launch(headless=headless_, slow_mo=500)
+        browser = drv.chromium.launch(headless=True, slow_mo=500)
         page = browser.new_page()
         page.set_default_timeout(8_000)
         yield page
         browser.close()
-
 
 @pytest.fixture
 def logged_in_page(page):
