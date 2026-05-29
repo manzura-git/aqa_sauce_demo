@@ -15,6 +15,9 @@ class CheckoutPage(BasePage):
         self.btn_cancel = self.page.get_by_role("button", name="Cancel")
         self.complete_header = self.page.locator(".complete-header")
         self.error_message = self.page.locator("[data-test='error']")
+        self.summary_subtotal = self.page.locator(".summary_subtotal_label")
+        self.summary_tax = self.page.locator(".summary_tax_label")
+        self.summary_total = self.page.locator(".summary_total_label")
 
     def fill_info(self, first_name: str, last_name: str, zip_code: str):
         self.field_first_name.fill(first_name)
@@ -41,13 +44,13 @@ class CheckoutPage(BasePage):
         return True
 
     def get_item_total(self) -> float:
-        text = self.page.locator(".summary_subtotal_label").text_content()
+        text = self.summary_subtotal.text_content()
         return float(text.split("$")[1])
 
     def get_tax(self) -> float:
-        text = self.page.locator(".summary_tax_label").text_content()
+        text = self.summary_tax.text_content()
         return float(text.split("$")[1])
 
     def get_total(self) -> float:
-        text = self.page.locator(".summary_total_label").text_content()
+        text = self.summary_total.text_content()
         return float(text.split("$")[1])

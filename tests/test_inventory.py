@@ -16,7 +16,8 @@ class TestInventory:
     def test_inv_002(self, logged_in_page):
         inventory = InventoryPage(logged_in_page)
         names = inventory.get_all_names()
-        assert sorted(names) == sorted(EXPECTED_PRODUCTS), "Названия товаров не совпадают с ожидаемыми"
+        assert sorted(names) == sorted(EXPECTED_PRODUCTS),\
+            "Названия товаров не совпадают с ожидаемыми"
 
     def test_inv_003(self, logged_in_page):
         inventory = InventoryPage(logged_in_page)
@@ -24,7 +25,9 @@ class TestInventory:
         prices = logged_in_page.locator(".inventory_item_price").all_text_contents()
         actual = dict(zip(names, prices))
         for product, expected_price in EXPECTED_PRICES.items():
-            assert actual[product] == expected_price, f"Цена {product}: ожидалась {expected_price}, получена {actual[product]}"
+            assert actual[product] == expected_price,\
+                (f"Цена {product}:ожидалась {expected_price},"
+                 f"получена {actual[product]}")
 
     def test_inv_004(self, logged_in_page):
         inventory = InventoryPage(logged_in_page)
@@ -46,7 +49,8 @@ class TestInventory:
         inventory = InventoryPage(logged_in_page)
         inventory.select_sort(SORT_AZ)
         names = inventory.get_all_names()
-        assert names == sorted(names), "Названия должны быть отсортированы по алфавиту A→Z"
+        assert names == sorted(names),\
+            "Названия должны быть отсортированы по алфавиту A→Z"
 
     def test_inv_008(self, logged_in_page):
         inventory = InventoryPage(logged_in_page)

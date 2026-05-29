@@ -1,0 +1,97 @@
+name: Tests CI
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * *'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Playwright browsers
+        run: playwright install --with-deps
+
+      - name: Run tests with Allure
+        run: |
+          pytest tests \
+            --alluredir=allure-results \
+            --clean-alluredir \
+            -v
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ github.run_number }}
+          path: allure-results
+
+      - name: Get Allure history
+        if: always()
+        run: |
+          if git ls-remote --exit-code --heads origin gh-pages; then
+            git fetch origin gh-pages --depth=1
+            mkdir -p gh-pages
+            git --work-tree=gh-pages checkout FETCH_HEAD -- .
+          else
+            mkdir -p gh-pages
+          fi
+
+      - name: Generate Allure report
+        if: always()
+        uses: simple-elf/allure-report-action@v1.13
+        with:
+          gh_pages: gh-pages
+          allure_results: allure-results
+          allure_report: allure-report
+          allure_history: allure-history
+
+      - name: Deploy report
+        if: always() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+      - name: Send Telegram notification
+        if: always()
+        uses: appleboy/telegram-action@v1.0.1
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          format: markdown
+          message: |
+            ✅ Тесты завершены!
+
+            📌 Репозиторий: ${{ github.repository }}
+            🌿 Ветка: ${{ github.ref_name }}
+            🔢 Run: #${{ github.run_number }}
+            📊 Статус: ${{ job.status }}
+            
+            🔗 GitHub Actions:
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            📊 Allure report:
+            https://${{ github.repository_owner }}.github.io/aqa\_sauce\_demo/${{ github.run_number }}/index.html

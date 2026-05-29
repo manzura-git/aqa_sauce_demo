@@ -28,7 +28,8 @@ class TestAuth:
         login_page.fill_username(USER_LOCKED_NAME)
         login_page.fill_password(USERS_PASSWORD)
         login_page.click_btn_login()
-        assert login_page.check_error_with_msg(E_MSG_LOGIN_LOCKED), "Заблокированный пользователь должен видеть ошибку"
+        assert login_page.check_error_with_msg(E_MSG_LOGIN_LOCKED),\
+            "Заблокированный пользователь должен видеть ошибку"
 
     @pytest.mark.parametrize("username", [USER_PROBLEM_NAME, USER_PERFORMANCE_NAME])
     def test_auth_002_valid_users(self, page, username):
@@ -46,7 +47,8 @@ class TestAuth:
     def test_auth_009(self, page):
         login_page = LoginPage(page)
         login_page.open(URL_BASE + URL_CART_HTML)
-        assert login_page.check_error_with_msg(E_MSG_LOGIN_CARD), "Доступ к /cart.html без авторизации должен показывать ошибку"
+        assert login_page.check_error_with_msg(E_MSG_LOGIN_CARD),\
+            "Доступ к /cart.html без авторизации должен показывать ошибку"
 
     def test_auth_010(self, page):
         login_page = LoginPage(page)

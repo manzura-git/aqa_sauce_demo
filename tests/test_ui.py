@@ -42,6 +42,40 @@ class TestUI:
         login.open()
         expect(page.get_by_role("button", name="Login")).to_be_enabled()
 
+    def test_ui_007(self, page):
+        login = LoginPage(page)
+        login.open()
+        page.keyboard.press("Tab")
+        assert page.evaluate("document.activeElement.id") == "user-name"
+        page.keyboard.press("Tab")
+        assert page.evaluate("document.activeElement.id") == "password"
+        page.keyboard.press("Tab")
+        assert page.evaluate("document.activeElement.id") == "login-button"
+
+    def test_ui_008(self, page):
+        login = LoginPage(page)
+        login.open()
+        assert page.locator("#user-name").get_attribute("type") == "text"
+        assert page.locator("#password").get_attribute("type") == "password"
+        assert page.locator("#user-name").get_attribute("placeholder") is not None
+        assert page.locator("#password").get_attribute("placeholder") is not None
+        login.fill_username(USER1_NAME)
+        login.fill_password(USERS_PASSWORD)
+        login.click_btn_login()
+        images = page.locator(".inventory_item img").all()
+        for img in images:
+            alt = img.get_attribute("alt")
+            assert alt is not None and alt != "", "Изображение без alt-атрибута"
+
+    def test_ui_009(self, logged_in_page):
+        inventory = InventoryPage(logged_in_page)
+        inventory.check_images_loaded()
+        broken = logged_in_page.evaluate(
+            "() => Array.from(document.querySelectorAll('.inventory_item img'))"
+            ".filter(img => !img.complete || img.naturalWidth === 0).length"
+        )
+        assert broken == 0, f"Найдено {broken} сломанных изображений"
+
     def test_ui_010(self, logged_in_page):
         response = logged_in_page.goto(URL_BASE + "/nonexistent-page.html")
         assert response is not None
