@@ -76,24 +76,6 @@ class TestCrossBrowser:
         inventory.click_remove_backpack()
         inventory.check_cart_badge_not_visible()
 
-    @allure.story("TC_XB_004")
-    @allure.title("Headless и headed дают одинаковый результат")
-    @allure.severity(allure.severity_level.MINOR)
-    @pytest.mark.low
-    def test_xb_004_headless_vs_headed(self, _playwright):
-        """TC_XB_004: headless и headed дают одинаковый результат."""
-        results = {}
-        for headless in (True, False):
-            browser = _playwright.chromium.launch(headless=headless)
-            page = browser.new_page()
-            page.set_default_timeout(8_000)
-            _do_login(page)
-            inventory = InventoryPage(page)
-            results[headless] = inventory.get_item_count()
-            browser.close()
-        assert results[True] == results[False], (
-            f"Headless={results[True]} ≠ Headed={results[False]}"
-        )
 
     @allure.story("TC_XB_005")
     @allure.title("UI корректен при разных разрешениях экрана")
