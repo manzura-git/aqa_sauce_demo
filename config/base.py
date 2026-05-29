@@ -18,6 +18,9 @@ E_MSG_CHECKOUT_FIRSTNAME = "Error: First Name is required"
 E_MSG_CHECKOUT_LASTNAME = "Error: Last Name is required"
 E_MSG_CHECKOUT_ZIPCODE = "Error: Postal Code is required"
 
+MSG_ORDER_COMPLETE = "Thank you for your order!"
+MSG_ORDER_DISPATCHED = "dispatched"
+
 SORT_AZ = "az"
 SORT_ZA = "za"
 SORT_PRICE_LOW = "lohi"

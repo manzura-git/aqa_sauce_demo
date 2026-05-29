@@ -1,5 +1,7 @@
 .venv/
 venv/
 .idea/
-
+allure-results/
+data/
+output/
 *.pyc
