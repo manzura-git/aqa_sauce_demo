@@ -4,5 +4,4 @@ venv/
 allure-results/
 data/
 output/
-utils/
 *.pyc
